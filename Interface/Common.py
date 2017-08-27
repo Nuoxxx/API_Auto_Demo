@@ -1,6 +1,6 @@
 import sys
-sys.path.append("\API_Auto")
-from API_Auto.API_Auto.Conf import config #导入Conf文件夹下的config.py文件，用于初始化配置文件
+sys.path.append('\API_Auto_Demo')
+from API_Auto.API_Auto_Demo.Conf import config #导入Conf文件夹下的config.py文件，用于初始化配置文件
 # import pymssql                #导入pymssql，用于连接SqlServer
 import requests
 import json

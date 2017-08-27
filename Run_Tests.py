@@ -2,7 +2,7 @@ import time, os
 import sys
 sys.path.append('./Interface')
 
-from API_Auto.Conf import config#导入配置文件
+from API_Auto.API_Auto_Demo.Conf import config#导入配置文件
 import unittest
 from HTMLTestRunner import HTMLTestRunner
 
