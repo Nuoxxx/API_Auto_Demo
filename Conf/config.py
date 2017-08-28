@@ -1,4 +1,5 @@
-# coding:utf-8
+#!/usr/bin/env Python
+# coding=utf8
 #导入configparser库，用于读取配置文件
 import configparser
 import os
