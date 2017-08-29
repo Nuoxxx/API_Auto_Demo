@@ -33,6 +33,7 @@ class MyCenter(unittest.TestCase):
         u"""登录测试"""
         url = Common.get_url('api/user/login')
         login_datalist = {"userName": d_mobile, "passWord": pwd}
+        # 发送post请求，将返回的JSon数据放在result中
         result = Common.post_request(url,login_datalist)
         r_code = result['code']
 

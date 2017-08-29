@@ -81,8 +81,7 @@ def post_request(url,datalist):
     r = requests.post(url, data=datalist, headers=headers)
     # json.loads() 解码：把Json格式字符串解码转换成Python对象
     # json.dumps() 编码：把一个Python对象编码转换成Json字符串
-    json_result = json.loads(r.text)
-    return json_result
+    return json.loads(r.text)
 
 def get_url(url):
     c = config.Config().get_conf()  # 调用config.py文件的get_conf()函数
