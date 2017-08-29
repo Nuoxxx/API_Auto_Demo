@@ -56,7 +56,7 @@ def Get_Database_data(Msql):
 
     cr.execute(Msql)
     result = cr.fetchall()
-    print("SQL查询结果：",result)
+    # print("SQL查询结果：",result)
 
     '''关闭数据库连接'''
     cr.close()
