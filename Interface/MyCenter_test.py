@@ -41,10 +41,15 @@ class MyCenter(unittest.TestCase):
             #账号正常登录，需要校验返回的数据和数据库数据是否一致
 
             #查询数据库数据
+            # 每一组数据是以元组的形式返回的[(),()]
+            # sql = """select * from pt_seller where (mobile LIKE  '1856568753%')"""
+            # c_result = Common.get_database_data(sql)
+
             # 将数据格式化输出
             # sql = "select * from pt_seller where mobile = "+('%s' %(d_mobile))
             # mobile本身为int类型，转成string类型
             sql = "select * from pt_seller where mobile = " + str(d_mobile)
+            # 数据库查询结果
             pt_user_result = Common.get_database_data(sql)
             pt_user_data = pt_user_result[0]
             # 性别
@@ -76,8 +81,5 @@ class MyCenter(unittest.TestCase):
         u"""获取Session Key"""
         session_Key = Common.get_cookie()
         print("MyCenter:",session_Key)
-        # 每一组数据是以元组的形式返回的[(),()]
-        # sql = """select * from pt_seller where (mobile LIKE  '1856568753%')"""
-        # c_result = Common.Get_Database_data(sql)
 
         self.assertTrue(True)

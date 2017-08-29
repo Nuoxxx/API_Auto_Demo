@@ -49,8 +49,7 @@ def get_database_data(Msql):
     db = cx_Oracle.connect(db_user, db_password,tns)
 
     cr = db.cursor()
-    # cr.execute("select * from dual")
-    # SQL插入语句
+    # SQL查询语句  # cr.execute("select * from dual")
     cr.execute(Msql)
     result = cr.fetchall()
 
@@ -83,6 +82,7 @@ def post_request(url,datalist):
     # json.dumps() 编码：把一个Python对象编码转换成Json字符串
     return json.loads(r.text)
 
+# 获取完整url地址
 def get_url(url):
     c = config.Config().get_conf()  # 调用config.py文件的get_conf()函数
     return (c["base_url"] + url)
