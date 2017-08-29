@@ -9,7 +9,7 @@ import unittest
 from HTMLTestRunner import HTMLTestRunner
 
 test_dir = './Interface'
-
+# 加载Interface目录下以"-test.py"结尾的脚本中的测试用例
 file = unittest.defaultTestLoader.discover(test_dir, pattern='*_test.py')
 
 if __name__ == '__main__':
