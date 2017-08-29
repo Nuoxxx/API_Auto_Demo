@@ -1,7 +1,7 @@
 #!/usr/bin/env Python
 # coding=utf-8
 import sys
-sys.path.append('\API_Auto_Demo')
+sys.path.append('\Conf')
 from API_Auto_Demo.Conf import config #导入Conf文件夹下的config.py文件，用于初始化配置文件
 # import pymssql                #导入pymssql，用于连接SqlServer
 import requests
@@ -35,7 +35,7 @@ import os
 #
 #     return trackno_result      #返回单号列表结果
 
-def Get_Database_data(Msql):
+def get_database_data(Msql):
     '''初始化数据'''
     c = config.Config().get_conf()   #调用config.py文件的get_conf()函数
 
@@ -47,16 +47,12 @@ def Get_Database_data(Msql):
     '''连接Oracle数据库'''
     tns = cx_Oracle.makedsn(db_host,1521,'orcl')
     db = cx_Oracle.connect(db_user, db_password,tns)
-    # charset = 'AMERICAN_AMERICA.ZHS16GBK'),database = 'zcst_yd'
-    # db = cx_Oracle.connect('zcst_cs','zcst315315','112.35.4.250:1521/orcl')
 
     cr = db.cursor()
     # cr.execute("select * from dual")
     # SQL插入语句
-
     cr.execute(Msql)
     result = cr.fetchall()
-    # print("SQL查询结果：",result)
 
     '''关闭数据库连接'''
     cr.close()
@@ -64,37 +60,34 @@ def Get_Database_data(Msql):
 
     return result      #返回查询结果
 
-def Get_Cookie():
-    c = config.Config().get_conf()   #调用config.py文件的get_conf()函数
-    url = Get_url('api/user/login')
-    print("url:",url)
-
-    username =c["userName"]
+def get_cookie():
+    c = config.Config().get_conf()  # 调用config.py文件的get_conf()函数
+    url = get_url('api/user/login')
+    username = c["userName"]
     userpwd = c["passWord"]
-
-
-    datalist = {"userName": username, "passWord": userpwd}
-    headers = {"User-Agent": "okhttp/3.1.2",
-               "Content-Type": "application/x-www-form-urlencoded"}
-    r = requests.post(url, data=datalist, headers=headers)
-
-    result = json.loads(r.text)
-    print(result)
+    cookie_datalist = {"userName": username, "passWord": userpwd}
+    result = post_request(url,cookie_datalist)
     sessionKey = result['item']['sessionKey']
-    print(sessionKey)
     return sessionKey
 
 def get_request():
     pass
 
-def post_request():
-    pass
+# post方法，返回JSon格式数据
+def post_request(url,datalist):
 
-def Get_url(url):
+    headers = {"User-Agent": "okhttp/3.1.2",
+               "Content-Type": "application/x-www-form-urlencoded"}
+    r = requests.post(url, data=datalist, headers=headers)
+    # json.loads() 解码：把Json格式字符串解码转换成Python对象
+    # json.dumps() 编码：把一个Python对象编码转换成Json字符串
+    json_result = json.loads(r.text)
+    return json_result
+
+def get_url(url):
     c = config.Config().get_conf()  # 调用config.py文件的get_conf()函数
     return (c["base_url"] + url)
 
 #解析JSon数据
-def Get_Json(Jdata,key):
-
+def get_json(Jdata,key):
     pass

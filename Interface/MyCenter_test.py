@@ -31,22 +31,10 @@ class MyCenter(unittest.TestCase):
     @unpack
     def test_user_login(self,d_mobile,pwd,msg):
         u"""登录测试"""
-        c = config.Config().get_conf()  # 调用config.py文件的get_conf()函数
-        #拼接URL
-        url = Common.Get_url("api/user/login")
-        print("userinfo url:",url)
-
-        datalist = {"userName": d_mobile, "passWord": pwd}
-        headers = {"User-Agent": "okhttp/3.1.2",
-                   "Content-Type": "application/x-www-form-urlencoded"}
-        r = requests.post(url, data=datalist, headers=headers)
-        #json.loads() 解码：把Json格式字符串解码转换成Python对象
-        #json.dumps() 编码：把一个Python对象编码转换成Json字符串
-        # print("r.text",r.text)
-        result = json.loads(r.text)
-        # print(result)
+        url = Common.get_url('api/user/login')
+        login_datalist = {"userName": d_mobile, "passWord": pwd}
+        result = Common.post_request(url,login_datalist)
         r_code = result['code']
-        # print("返回的code:",r_code)
 
         if r_code =='0':
             #账号正常登录，需要校验返回的数据和数据库数据是否一致
@@ -56,7 +44,7 @@ class MyCenter(unittest.TestCase):
             # sql = "select * from pt_seller where mobile = "+('%s' %(d_mobile))
             # mobile本身为int类型，转成string类型
             sql = "select * from pt_seller where mobile = " + str(d_mobile)
-            pt_user_result = Common.Get_Database_data(sql)
+            pt_user_result = Common.get_database_data(sql)
             pt_user_data = pt_user_result[0]
             # 性别
             pt_seller_sex = pt_user_data[3]
@@ -76,16 +64,16 @@ class MyCenter(unittest.TestCase):
             self.assertEqual(pt_seller_sex,ser_sex,u'性别不一致')
             self.assertEqual(pt_seller_mobile,ser_mobile,u'手机号不一致')
             self.assertEqual(pt_seller_identitystatus,ser_identitystatus,u'身份认证不一致')
-            print('*****和数据数据一致**********')
+            print('*****服务器返回和数据库数据一致**********')
         else:
+            #未登录成功，校验服务器返回的报错信息和文档中内容是否一致
             r_msg = result['msg']
-            print(r_msg)
-            self.assertEqual(r_msg,msg)
+            self.assertEqual(r_msg,msg,u'和预期结果不一致')
 
 
     def test_Sessionkey(self):
         u"""获取Session Key"""
-        session_Key = Common.Get_Cookie()
+        session_Key = Common.get_cookie()
         print("MyCenter:",session_Key)
         # 每一组数据是以元组的形式返回的[(),()]
         # sql = """select * from pt_seller where (mobile LIKE  '1856568753%')"""
