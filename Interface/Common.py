@@ -60,27 +60,36 @@ def get_database_data(Msql):
     return result      #返回查询结果
 
 def get_cookie():
+    result = get_userinfo()
+    sessionKey = result['item']['sessionKey']
+    return sessionKey
+
+def get_userinfo():
     c = config.Config().get_conf()  # 调用config.py文件的get_conf()函数
     url = get_url('api/user/login')
     username = c["userName"]
     userpwd = c["passWord"]
-    cookie_datalist = {"userName": username, "passWord": userpwd}
-    result = post_request(url,cookie_datalist)
-    sessionKey = result['item']['sessionKey']
-    return sessionKey
+    cookie_datamap = {"userName": username, "passWord": userpwd}
+    result = post_request(url, cookie_datamap)
+    return result
 
 def get_request():
     pass
 
 # post方法，返回JSon格式数据
-def post_request(url,datalist):
+def post_request(url,datamap):
 
     headers = {"User-Agent": "okhttp/3.1.2",
                "Content-Type": "application/x-www-form-urlencoded"}
-    r = requests.post(url, data=datalist, headers=headers)
+    r = requests.post(url, data=datamap, headers=headers)
     # json.loads() 解码：把Json格式字符串解码转换成Python对象
     # json.dumps() 编码：把一个Python对象编码转换成Json字符串
-    return json.loads(r.text)
+    # 服务器返回的状态码200说明接口正常响应，否则需要异常处理
+    if r.status_code == 200:
+        return json.loads(r.text)
+    else:
+        r.raise_for_status()
+        return None
 
 # 获取完整url地址
 def get_url(url):

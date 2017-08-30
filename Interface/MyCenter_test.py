@@ -32,9 +32,9 @@ class MyCenter(unittest.TestCase):
     def test_user_login(self,d_mobile,pwd,msg):
         u"""登录测试"""
         url = Common.get_url('api/user/login')
-        login_datalist = {"userName": d_mobile, "passWord": pwd}
+        login_datamap = {"userName": d_mobile, "passWord": pwd}
         # 发送post请求，将返回的JSon数据放在result中
-        result = Common.post_request(url,login_datalist)
+        result = Common.post_request(url,login_datamap)
         r_code = result['code']
 
         if r_code =='0':
