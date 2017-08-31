@@ -66,15 +66,19 @@ def get_cookie():
 
 def get_userinfo():
     c = config.Config().get_conf()  # 调用config.py文件的get_conf()函数
-    url = get_url('api/user/login')
+    url = get_url('/api/user/login')
     username = c["userName"]
     userpwd = c["passWord"]
     cookie_datamap = {"userName": username, "passWord": userpwd}
     result = post_request(url, cookie_datamap)
     return result
 
-def get_request():
-    pass
+def get_request(url):
+    r = requests.get(url)
+    if (r.status_code == 200 or r.status_code == 304):
+        return True
+    else:
+        return False
 
 # post方法，返回JSon格式数据
 def post_request(url,datamap):

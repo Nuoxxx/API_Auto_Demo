@@ -31,7 +31,7 @@ class MyCenter(unittest.TestCase):
     @unpack
     def test_user_login(self,d_mobile,pwd,msg):
         u"""登录测试"""
-        url = Common.get_url('api/user/login')
+        url = Common.get_url('/api/user/login')
         login_datamap = {"userName": d_mobile, "passWord": pwd}
         # 发送post请求，将返回的JSon数据放在result中
         result = Common.post_request(url,login_datamap)
