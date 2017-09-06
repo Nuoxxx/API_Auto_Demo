@@ -33,7 +33,7 @@ class MyCenter(unittest.TestCase):
           {'userName': 18565687531, 'msg': '用户名或密码不能为空！'})
     # unpack 将一个用例的参数分解开，按照（不定）参数传递
     @unpack
-    # 支持不定参数  **kwargs 传入不定数量的键值对
+    # 支持不定参数，**kwargs 传入不定数量的键值对
     def test_user_login(self,**kwargs):
 
         u"""登录测试"""
