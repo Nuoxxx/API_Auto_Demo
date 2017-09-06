@@ -15,27 +15,35 @@ from API_Auto_Demo.Interface import Common
 @ddt
 class MyCenter(unittest.TestCase):
     '''个人中心接口测试'''
-
-    def setUp(self):
+    base_url = ''
+    @classmethod
+    def setUpClass(cls):
         '''初始化数据'''
         c = config.Config().get_conf()   #调用config.py文件的get_conf()函数
-
-    def tearDown(self):
+        cls.base_url = c["base_url"]
+    @classmethod
+    def tearDownClass(cls):
         print("tearDown")
 
-    @data((18565687531,123456,''),
-          (123,123456,'营销帐号不存在！'),
-          (18565687531,000000,'密码认证失败!'),
-          (18565687531, '', '用户名或密码不能为空！'),
-          ('', 123456, '用户名或密码不能为空！'))
+    @data({'userName':18565687531,'passWord':123456,'msg':''},
+          {'userName':1231,'passWord':123456,'msg':'营销帐号不存在！'},
+          {'userName':18565687531,'passWord':000000,'msg':'密码认证失败!'},
+          {'userName':18565687531,'passWord':'','msg': '用户名或密码不能为空！'},
+          {'userName':'','passWord':123456,'msg': '用户名或密码不能为空！'},
+          {'userName': 18565687531, 'msg': '用户名或密码不能为空！'})
+    # unpack 将一个用例的参数分解开，按照（不定）参数传递
     @unpack
-    def test_user_login(self,d_mobile,pwd,msg):
+    # 支持不定参数  **kwargs 传入不定数量的键值对
+    def test_user_login(self,**kwargs):
+
         u"""登录测试"""
-        url = Common.get_url('/api/user/login')
-        login_datamap = {"userName": d_mobile, "passWord": pwd}
+        url = Common.get_url(self.base_url,'/api/user/login')
         # 发送post请求，将返回的JSon数据放在result中
-        result = Common.post_request(url,login_datamap)
+        result = Common.post_request(url,kwargs)
         r_code = result['code']
+
+        d_mobile = kwargs['userName']
+        msg = kwargs['msg']
 
         if r_code =='0':
             #账号正常登录，需要校验返回的数据和数据库数据是否一致
@@ -83,3 +91,6 @@ class MyCenter(unittest.TestCase):
         print("MyCenter:",session_Key)
 
         self.assertTrue(True)
+
+if __name__ == '__main__':
+    unittest.main()

@@ -66,7 +66,7 @@ def get_cookie():
 
 def get_userinfo():
     c = config.Config().get_conf()  # 调用config.py文件的get_conf()函数
-    url = get_url('/api/user/login')
+    url = get_url(c["base_url"],'/api/user/login')
     username = c["userName"]
     userpwd = c["passWord"]
     cookie_datamap = {"userName": username, "passWord": userpwd}
@@ -96,9 +96,9 @@ def post_request(url,datamap):
         return None
 
 # 获取完整url地址
-def get_url(url):
-    c = config.Config().get_conf()  # 调用config.py文件的get_conf()函数
-    return (c["base_url"] + url)
+def get_url(baseurl,url):
+    # c = config.Config().get_conf()  # 调用config.py文件的get_conf()函数
+    return (baseurl + url)
 
 #解析JSon数据
 def get_json(Jdata,key):
