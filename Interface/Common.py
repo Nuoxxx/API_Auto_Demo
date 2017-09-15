@@ -35,7 +35,7 @@ import os
 #
 #     return trackno_result      #返回单号列表结果
 
-def get_database_data(Msql):
+def get_database_data(state,*Msql):
     '''初始化数据'''
     c = config.Config().get_conf()   #调用config.py文件的get_conf()函数
 
@@ -50,13 +50,14 @@ def get_database_data(Msql):
 
     cr = db.cursor()
     # SQL查询语句  # cr.execute("select * from dual")
-    cr.execute(Msql)
+    cr.execute(state,*Msql)
+
     result = cr.fetchall()
 
     '''关闭数据库连接'''
     cr.close()
     db.close()
-
+    # 返回的结果是个list，里面放置的tuple类型的数据
     return result      #返回查询结果
 
 def get_cookie():
@@ -74,7 +75,7 @@ def get_userinfo():
     return result
 
 def get_request(url):
-    r = requests.get(url)
+    r = requests.get(url,verify = False)
     if (r.status_code == 200 or r.status_code == 304):
         return True
     else:
@@ -85,7 +86,8 @@ def post_request(url,datamap):
 
     headers = {"User-Agent": "okhttp/3.1.2",
                "Content-Type": "application/x-www-form-urlencoded"}
-    r = requests.post(url, data=datamap, headers=headers)
+    # verify = False如果不设置的话，用https格式的请求会报SSL错误,设置为False可以忽略验证SSL证书；
+    r = requests.post(url, data=datamap, headers=headers,verify = False)
     # json.loads() 解码：把Json格式字符串解码转换成Python对象
     # json.dumps() 编码：把一个Python对象编码转换成Json字符串
     # 服务器返回的状态码200说明接口正常响应，否则需要异常处理
